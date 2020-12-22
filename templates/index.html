@@ -11,19 +11,32 @@
     <h3>Upload album</h3>
     <form method="POST" action="" enctype="multipart/form-data">
     
-    <p><input type="file" name="file" multiple></p>
-    <p><input type="submit" value="Submit"></p>
+        <p><input type="file" name="file" multiple></p>
+        <p><input type="submit" value="Submit"></p>
     
     </form>
 
-    <h4>Pictures</h4>
+    <form method="POST" action="{{ url_for('predict') }}">
+        <p><input type="submit" value="Predict"></p>
+    </form>
+
+    <h3>Pictures</h3>
     {% for image in images %}
         <img src="{{ url_for('upload', filename=image) }}" style="width: 64px">
     {% endfor %}
 
-    <!-- {{ message }} -->
+    <h3>Clusters</h3>
 
+    {% for cluster in cluster_dict %}
+        <h4> {{ cluster }} </h4>
+        
+        {% for pic in cluster_dict[cluster] %}
+            <img src="{{ url_for('upload', filename=pic) }}" style="width: 256px; height: 256px;">
+        {% endfor %}
 
+    {% endfor %} 
+    
+    
     
 
 </body>

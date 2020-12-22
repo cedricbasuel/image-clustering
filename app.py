@@ -37,10 +37,7 @@ def index():
     images = os.listdir(app.config['UPLOAD_PATH'])
 
 
-
-
-
-    return render_template('index.html', images=images)
+    return render_template('index.html', images=images, cluster_dist={})
     # return render_template('index.html',uri=uri)
 
 @app.route('/uploads/<filename>')
@@ -49,38 +46,47 @@ def upload(filename):
 
 
 
-# @app.route('/predict', methods=['POST', 'GET'])
-# def predict(dir):
+@app.route('/predict', methods=['POST'])
+def predict():
 
-#     _labels = {'animalz': 0}
+    if request.method=='POST':
+        _labels = {'animalz': 0}
 
-#     image_list, label_list = load_images(dir=dir,
-#         target_size=(224,224),
-#         labelmap=_labels
-#         )
+        image_list, label_list = load_images(dir=app.config['UPLOAD_PATH'],
+            target_size=(224,224),
+            labelmap=_labels
+            )
 
-#     image_list, emb_list = get_embedding(image_list=image_list,
-#     model_name='mobilenet',
-#     image_shape=(224,224,3))
+        image_list, emb_list = get_embedding(image_list=image_list,
+        model_name='mobilenet',
+        image_shape=(224,224,3))
 
-#     # print(emb_list.shape)
+        # print(emb_list.shape)
 
-#     clustered_images = cluster_images(image_list=image_list, 
-#     emb_list=emb_list, 
-#     num_clusters=5
-#     )
-    
-#     # clean this up laterrrr
-#     cluster_df = pd.DataFrame({'Image':label_list, 'Cluster':clustered_images})
+        clustered_images = cluster_images(image_list=image_list, 
+        emb_list=emb_list, 
+        num_clusters=2
+        )
+        
+        # clean this up laterrrr
+        cluster_df = pd.DataFrame({'Image':label_list, 'Cluster':clustered_images})
 
-#     cluster_dict = {}
-#     cluster_dict = {None for key in list(set(cluster_df['cluster']))}
-#     for key in cluster_dict.keys():
-#         temp_df = cluster_df[cluster_df['Cluster']==key]
-#         cluster_dict[key] = list(temp_df['Image'])
+        cluster_dict = {}
+        cluster_dict = {key: None for key in list(set(cluster_df['Cluster']))}
 
-#     return render_template('index.html',cluster_dict=cluster_dict)
+        for key in cluster_dict.keys():
+            temp_df = cluster_df[cluster_df['Cluster']==key]
+            cluster_dict[key] = list(temp_df['Image'])
+
+
+        images = os.listdir(app.config['UPLOAD_PATH'])
+    return render_template('index.html', images=images, cluster_dict=cluster_dict)
 
 
 if __name__=="__main__":
     app.run(debug=True)
+
+
+
+
+# sudo rm -rf ~/.nv/
