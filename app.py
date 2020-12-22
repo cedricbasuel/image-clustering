@@ -43,7 +43,7 @@ def predict():
 
         clustered_images = cluster_images(image_list=image_list, 
         emb_list=emb_list, 
-        num_clusters=2
+        num_clusters=5
         )
         
         # clean this up laterrrr
