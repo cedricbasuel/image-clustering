@@ -25,29 +25,30 @@
     </form>
 
     <h3>Pictures</h3>
-    {% for image in images %}
-        <img src="{{ url_for('upload', filename=image) }}" style="width: 64px">
-    {% endfor %}
+        {% for image in images %}
+            <img src="{{ url_for('upload', filename=image) }}" style="width: 64px;">
+        {% endfor %}
 
     <h3>Clusters</h3>
-
     {% for cluster in cluster_dict %}
+        <div class="cluster">
+            
+            <div class="cluster_label">
+                 <div class="numberCircle">
+                     {{ cluster }}
+                    </div> 
+            </div>
 
-        <!-- <div class="gallery"> -->
-            <h4> {{ cluster }} </h4>
-            {% for pic in cluster_dict[cluster] %}
-                <img src="{{ url_for('upload', filename=pic) }}" style="width: 100px; height: 100px;">
-            {% endfor %}
-
-        <!-- </div> -->
-        
-        
-        
-
+            <div class="cluster_gallery">
+                {% for pic in cluster_dict[cluster] %}
+                    <img src="{{ url_for('upload', filename=pic) }}" style="width: 100px; height: 100px;">
+                {% endfor %} 
+                <br>  
+            </div>
+                    
+        </div>
     {% endfor %} 
-    
-    
-    
+       
 
 </body>
 

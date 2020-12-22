@@ -15,12 +15,40 @@
  */
 
 body{
+    width: 60%;
     font-family: Arial, Helvetica, sans-serif;
-    margin-left: 250px;
+    margin-left: 350px;
     margin-right: 250px;
+    
     /* background-color:#CCCCCC; */
  }
 
- gallery{
-    margin-right: 250px; 
+.cluster{
+    display: table;
+    width: 50%;
+    /* background-color: seagreen;  */
+    /* align-content: center; */
+}
+.cluster_label{
+    display: table-cell;
+    vertical-align: top;
+    padding-right: 20px;
+}
+.cluster_gallery{
+    padding-right: 20px;
+    display: table-cell;
+}
+.numberCircle {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+
+    background: teal;
+    /* border: 2px solid #666; */
+    color: #fff;
+    text-align: center;
+
+    font: 20px Arial, sans-serif;
+    font-weight: bolder;
 }
