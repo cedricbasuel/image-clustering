@@ -2,15 +2,29 @@
 <html>
 
 <head>
-
-
-
+    <title>ImageCluster Eme</title>
 
 </head>
 
 <body>
 
+    <h3>Upload album</h3>
+    <form method="POST" action="" enctype="multipart/form-data">
+    
+    <p><input type="file" name="file" multiple></p>
+    <p><input type="submit" value="Submit"></p>
+    
+    </form>
 
+    <h4>Pictures</h4>
+    {% for image in images %}
+        <img src="{{ url_for('upload', filename=image) }}" style="width: 64px">
+    {% endfor %}
+
+    <!-- {{ message }} -->
+
+
+    
 
 </body>
 
