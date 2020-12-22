@@ -1,0 +1,26 @@
+
+
+.container{
+    padding: 0 1.5rem;
+
+}
+
+/* .gallery{
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-gap: 1.5rem
+}
+ */
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 250px;
+    margin-right: 250px;
+    /* background-color:#CCCCCC; */
+ }
+
+ gallery{
+    margin-right: 250px; 
+}
