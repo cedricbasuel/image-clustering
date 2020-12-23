@@ -81,6 +81,7 @@ def get_embedding(image_list, model_name, image_shape):
     emb_list = []
 
     logging.info('Getting image embeddings...')
+    # logging.info(model_name)
     if model_name=='mobilenet':
         model = tf.keras.applications.MobileNetV2(
             weights='imagenet',

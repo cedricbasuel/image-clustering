@@ -26,10 +26,14 @@ def upload(filename):
 
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET','POST'])
 def predict():
 
     if request.method=='POST':
+
+        num_cluster = request.form.get('num_cluster', False)
+        modelname = request.form.get('modelname')
+        print("MODELNAME",modelname)
         _labels = {'animalz': 0}
 
         image_list, label_list = load_images(dir=app.config['UPLOAD_PATH'],
@@ -38,12 +42,12 @@ def predict():
             )
 
         image_list, emb_list = get_embedding(image_list=image_list,
-        model_name='mobilenet',
+        model_name=modelname,
         image_shape=(224,224,3))
 
         clustered_images = cluster_images(image_list=image_list, 
         emb_list=emb_list, 
-        num_clusters=5
+        num_clusters=num_cluster
         )
         
         # clean this up laterrrr
