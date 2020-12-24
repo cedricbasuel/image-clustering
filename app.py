@@ -18,7 +18,7 @@ def index():
     
     images = os.listdir(app.config['UPLOAD_PATH'])
 
-    return render_template('index.html', images=images, cluster_dist={})
+    return render_template('index.html', images=images)
 
 @app.route('/uploads/<filename>')
 def upload(filename):
@@ -65,6 +65,7 @@ def predict():
 
 
         images = os.listdir(app.config['UPLOAD_PATH'])
+        
     return render_template('index.html', images=images, cluster_dict=cluster_dict)
 
 
