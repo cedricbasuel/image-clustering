@@ -34,6 +34,9 @@ def predict():
         num_cluster = request.form.get('num_cluster', False)
         modelname = request.form.get('modelname')
         print("MODELNAME",modelname)
+
+        num_cluster = int(num_cluster)
+
         _labels = {'animalz': 0}
 
         image_list, label_list = load_images(dir=app.config['UPLOAD_PATH'],

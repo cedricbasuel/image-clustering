@@ -112,6 +112,9 @@ def get_embedding(image_list, model_name, image_shape):
 @timer
 def cluster_images(image_list, emb_list, num_clusters):
     kmodel = KMeans(n_clusters=num_clusters, n_jobs=-1)
+
+    logging.info(num_clusters)
+    logging.info(emb_list.shape)
     
     kmodel.fit(emb_list)
     logging.info('KMeans clustering done.')
