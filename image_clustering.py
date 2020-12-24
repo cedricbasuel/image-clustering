@@ -1,3 +1,13 @@
+'''Script for  image clustering using CNNs.
+
+Usage:
+    python image_clustering.py <config>.yaml
+
+Author:
+    Cedric Basuel
+
+'''
+
 import tensorflow as tf
 import numpy as np
 import cv2
@@ -39,6 +49,7 @@ def load_images(dir, target_size, labelmap):
     Returns
     -------
     image_list : ndarray
+        List of raw images.
     
     label_list : ndarray
         Label list for each image, mapped to integer labels.
@@ -78,6 +89,29 @@ def load_images(dir, target_size, labelmap):
 
 @timer
 def get_embedding(image_list, model_name, image_shape, model_loaded=True):
+    '''Use a pretrained CNN model to get features from an image.
+
+    Params
+    ------
+    image_list : ndarray
+        List of raw images.
+
+    model_name : str
+        Name of CNN model.
+
+    image_shape : tuple
+        Dimensions of image.
+
+    model_loaded : bool
+        True if  model is preloaded in env, otherwise load CNN model from scratch.
+
+    Returns
+    -------
+    emb_list : ndarray
+        Extracted image features.
+
+    '''
+
     emb_list = []
 
     logging.info('Getting image embeddings...')
@@ -134,6 +168,23 @@ def get_embedding_only(image_list, model_name, image_shape):
 
 @timer
 def cluster_images(image_list, emb_list, num_clusters):
+    '''Use kmeans clustering to from explore clusters of images
+    given the n-dimensional embeddings from get_embedding().
+
+    Params
+    ------
+    emb_list : ndarray
+        Embeddings extracted from each image.
+
+    num_clusters: int
+        Number of clusters to fit.
+
+    Returns
+    -------
+    clustered_images : list
+        List of integers indicating cluster membership for each image.
+
+    '''
     kmodel = KMeans(n_clusters=num_clusters, n_jobs=-1)
 
     logging.info(num_clusters)
