@@ -72,9 +72,9 @@
         {% endfor %}
 
     <h3>Clusters</h3>
+    
     {% for cluster in cluster_dict %}
-        <div class="cluster">
-            
+        <div class="cluster"> 
             <div class="cluster_label">
                  <div class="numberCircle">
                      {{ cluster }}
@@ -83,14 +83,20 @@
 
             <div class="cluster_gallery">
                 {% for pic in cluster_dict[cluster] %}
-                    <img src="{{ url_for('upload', filename=pic) }}" style="width: 100px; height: 100px;">
+                    <img src="{{ url_for('upload', filename=pic) }}" style="width: 100px; height: 100px; margin:2.5px">
                 {% endfor %} 
-                <br>  
+                  
             </div>
                     
         </div>
+        <br>
     {% endfor %} 
-       
+    
+
+    
+     
+    <br>
+    <br>
 
 </body>
 

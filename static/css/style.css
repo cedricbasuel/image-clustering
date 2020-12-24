@@ -8,21 +8,23 @@ body{
     text-align: center;
 } */
 
-
+/* style for clustered pics */
 .cluster{
-    display: table;
+    display: flex;
     width: 50%;
 
 }
 .cluster_label{
-    display: table-cell;
-    vertical-align: top;
+    /* display: table-cell; */
+    /* vertical-align: top; */
     padding-right: 20px;
 }
 .cluster_gallery{
-    padding-right: 20px;
-    display: table-cell;
+    /* padding-right: 20px; */
+    /* display: table-cell; */
+    
 }
+
 /* cluster label  design */
 .numberCircle {
     border-radius: 50%;
@@ -38,78 +40,4 @@ body{
 
     font: 20px Arial, sans-serif;
     font-weight: bolder;
-}
-
-/* number of clusters design */
-
-.form-settings {
-    display: table;
-    border: 1px green solid;
-    padding: 10px;
-}
-
-.model-input {
-    display: table-cell;
-    height: 40px;
-    width: 250px;
-    padding-left:40px;
-    /* float: left; */
-}
-
-.number-input {
-    /* align-content: center; */
-    /* display: inline-flex; */
-    width: 97px; 
-    height: 37px; 
-    border: 2px #dcd3d3 solid;
-    border-width: 1.5px;
-    border-radius: 7.5px;
-    display: flex;
-    flex-direction: row;
-    align-items: center; 
-    justify-content: center;
-    /* text-align: center; */
-}
-  
-.number-input button {
-    background-color: transparent;
-    border: none;
-    width: 20px;
-    height: 20px;
-    font-size: 15px;
-    color: #5f5fce;
-    font-weight: bolder;
-}
-  
-.number-input button:before,
-.number-input button:after {
-    /* width: 1rem; */
-    /* height: 2px; */
-    background-color: #212121;
-  }
-  /* .number-input button.plus:after {
-    transform: translate(-50%, -50%) rotate(90deg);
-  }
-   */
-  .number-input input[type=number] {
-    font-family: sans-serif;
-    max-width: 40px;
-    /* padding: ; */
-    border: none;
-    /* border-width: 0 2px; */
-    font-size: 15px;
-    /* height: 3rem; */
-    font-weight: bold;
-    text-align: center;
-    /* color:#5f5fce; */
-  }
-
-  .input-default-js{
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-
 }
