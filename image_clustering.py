@@ -83,18 +83,29 @@ def get_embedding(image_list, model_name, image_shape):
     logging.info('Getting image embeddings...')
     # logging.info(model_name)
     if model_name=='mobilenet':
+        # logging.info('Loading model')
         model = tf.keras.applications.MobileNetV2(
             weights='imagenet',
             include_top=True, ### wait True nga dapat db?? nalito ako
             input_shape=image_shape,
             layers=tf.keras.layers
         )
+    
+    elif model_name=='resnet50':
+        model = tf.keras.applications.ResNet50(
+            weights='imagenet', 
+            include_top=True, 
+            input_shape=image_shape
+        )
 
+    logging.info('successfully loaded model EMZ')
     for img in image_list:
         img = np.expand_dims(img, axis=0)
+        logging.info('JUZ B4 PREDICT')
         temp_emb = model.predict(img)
+        logging.info('AFTER ONE PREDICT')
         emb_list.append(np.squeeze(temp_emb))
-
+    logging.info('successfully extracted embeddings!!')
     return image_list, np.array(emb_list)
 
 
@@ -122,10 +133,10 @@ if __name__=='__main__':
         )
 
     image_list, emb_list = get_embedding(image_list=image_list,
-    model_name='mobilenet',
+    model_name='resnet50',
     image_shape=(224,224,3))
 
-    # print(emb_list.shape)
+    logging.info(emb_list.shape)
 
     clustered_images = cluster_images(image_list=image_list, 
     emb_list=emb_list, 
