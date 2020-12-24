@@ -77,35 +77,43 @@ def load_images(dir, target_size, labelmap):
     return image_list, label_list
 
 @timer
-def get_embedding(image_list, model_name, image_shape):
+def get_embedding(image_list, model_name, image_shape, model_loaded=True):
     emb_list = []
 
     logging.info('Getting image embeddings...')
-    # logging.info(model_name)
-    if model_name=='mobilenet':
-        # logging.info('Loading model')
-        model = tf.keras.applications.MobileNetV2(
-            weights='imagenet',
-            include_top=True, ### wait True nga dapat db?? nalito ako
-            input_shape=image_shape,
-            layers=tf.keras.layers
-        )
-    
-    elif model_name=='resnet50':
-        model = tf.keras.applications.ResNet50(
-            weights='imagenet', 
-            include_top=True, 
-            input_shape=image_shape
-        )
+    logging.info(model_name)
 
-    logging.info('successfully loaded model EMZ')
+    model = model_name
+
+    if not model_loaded:
+        if model_name=='mobilenet':
+            model = tf.keras.applications.MobileNetV2(
+                weights='imagenet',
+                include_top=True, ### wait True nga dapat db?? nalito ako
+                input_shape=image_shape,
+                layers=tf.keras.layers
+            )
+        
+        elif model_name=='resnet50':
+            model = tf.keras.applications.ResNet50(
+                weights='imagenet', 
+                include_top=True, 
+                input_shape=image_shape
+            )
+
+        else: 
+            raise ValueError('Model not yet available.')
+
+        logging.info('Successfully loaded model.')
+
+
     for img in image_list:
         img = np.expand_dims(img, axis=0)
-        logging.info('JUZ B4 PREDICT')
         temp_emb = model.predict(img)
-        logging.info('AFTER ONE PREDICT')
         emb_list.append(np.squeeze(temp_emb))
+    
     logging.info('successfully extracted embeddings!!')
+    
     return image_list, np.array(emb_list)
 
 @timer
@@ -115,12 +123,9 @@ def get_embedding_only(image_list, model_name, image_shape):
     logging.info('Getting image embeddings...')
     model = model_name
 
-    logging.info('successfully loaded model EMZ')
     for img in image_list:
         img = np.expand_dims(img, axis=0)
-        # logging.info('JUZ B4 PREDICT')
         temp_emb = model.predict(img)
-        # logging.info('AFTER ONE PREDICT')
         emb_list.append(np.squeeze(temp_emb))
     logging.info('successfully extracted embeddings!!')
 
@@ -155,7 +160,9 @@ if __name__=='__main__':
 
     image_list, emb_list = get_embedding(image_list=image_list,
     model_name='resnet50',
-    image_shape=(224,224,3))
+    image_shape=(224,224,3),
+    model_loaded=False
+    )
 
     logging.info(emb_list.shape)
 
@@ -165,6 +172,6 @@ if __name__=='__main__':
     )
     
     logging.info('Done!')
-    df = pd.DataFrame({'Image':label_list, 'Cluster':clustered_images})
+    df = pd.DataFrame({'Image' : label_list, 'Cluster' : clustered_images})
 
     print(df)
