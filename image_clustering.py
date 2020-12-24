@@ -108,6 +108,24 @@ def get_embedding(image_list, model_name, image_shape):
     logging.info('successfully extracted embeddings!!')
     return image_list, np.array(emb_list)
 
+@timer
+def get_embedding_only(image_list, model_name, image_shape):
+    emb_list = []
+
+    logging.info('Getting image embeddings...')
+    model = model_name
+
+    logging.info('successfully loaded model EMZ')
+    for img in image_list:
+        img = np.expand_dims(img, axis=0)
+        # logging.info('JUZ B4 PREDICT')
+        temp_emb = model.predict(img)
+        # logging.info('AFTER ONE PREDICT')
+        emb_list.append(np.squeeze(temp_emb))
+    logging.info('successfully extracted embeddings!!')
+
+    return image_list, np.array(emb_list)
+
 
 @timer
 def cluster_images(image_list, emb_list, num_clusters):
@@ -115,7 +133,7 @@ def cluster_images(image_list, emb_list, num_clusters):
 
     logging.info(num_clusters)
     logging.info(emb_list.shape)
-    
+
     kmodel.fit(emb_list)
     logging.info('KMeans clustering done.')
 
