@@ -1,2 +1,4 @@
 # ignore uploaded pics
 uploads
+train_image.log
+__pycache__
