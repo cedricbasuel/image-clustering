@@ -4,3 +4,4 @@ training:
   num_clusters: 5
   labels: {photos: 0}
   model_name: 'resnet50'
+  gpu_mem: 1024

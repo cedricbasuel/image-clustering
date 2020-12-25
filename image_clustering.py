@@ -61,30 +61,17 @@ def load_images(dir, target_size, labelmap):
     logging.info('Loading images from {}...'.format(dir))
     for root, dirs, files in os.walk(dir):
         for file in files:
-            temp_dir = str.split(root, '/')
-            
+            temp_dir = str.split(root, '/')           
             try:
                 temp_image = cv2.imread(os.path.join(root, file))
                 temp_image = cv2.cvtColor(temp_image, cv2.COLOR_BGR2RGB)
                 temp_image = cv2.resize(temp_image, dsize=target_size)
                 image_list.append(temp_image)
-
-                # folder name is class name
-                # changed: im just getting the file name here since unsupervised
-                label_list.append(file)
-            
+                label_list.append(file)            
             except cv2.error:
                 pass
 
     image_list = np.array(image_list)
-    # label_list = np.array(
-        # [labelmap[label] for label in label_list], 
-        # dtype='int32'
-    # )
-
-    print('Image list:', image_list.shape)
-    # print('Label list:', label_list.shape)
-
     return image_list, label_list
 
 @timer
@@ -94,7 +81,7 @@ def get_embedding(image_list, model_name, image_shape, model_loaded=True):
     Params
     ------
     image_list : ndarray
-        List of raw images.
+        List of raw images from load_images.
 
     model_name : str
         Name of CNN model.
@@ -103,7 +90,7 @@ def get_embedding(image_list, model_name, image_shape, model_loaded=True):
         Dimensions of image.
 
     model_loaded : bool
-        True if  model is preloaded in env, otherwise load CNN model from scratch.
+        True if model is preloaded in env, otherwise load CNN model from scratch.
 
     Returns
     -------
@@ -111,12 +98,10 @@ def get_embedding(image_list, model_name, image_shape, model_loaded=True):
         Extracted image features.
 
     '''
-
-    emb_list = []
-
     logging.info('Getting image embeddings...')
     logging.info(model_name)
 
+    emb_list = []
     model = model_name
 
     if not model_loaded:
@@ -126,15 +111,13 @@ def get_embedding(image_list, model_name, image_shape, model_loaded=True):
                 include_top=True, ### wait True nga dapat db?? nalito ako
                 input_shape=image_shape,
                 layers=tf.keras.layers
-            )
-        
+            )        
         elif model_name=='resnet50':
             model = tf.keras.applications.ResNet50(
                 weights='imagenet', 
                 include_top=True, 
                 input_shape=image_shape
             )
-
         else: 
             raise ValueError('Model not yet available.')
 
@@ -150,28 +133,10 @@ def get_embedding(image_list, model_name, image_shape, model_loaded=True):
     
     return image_list, np.array(emb_list)
 
-
-# remove!!!
-@timer
-def get_embedding_only(image_list, model_name, image_shape):
-    emb_list = []
-
-    logging.info('Getting image embeddings...')
-    model = model_name
-
-    for img in image_list:
-        img = np.expand_dims(img, axis=0)
-        temp_emb = model.predict(img)
-        emb_list.append(np.squeeze(temp_emb))
-    logging.info('successfully extracted embeddings!!')
-
-    return image_list, np.array(emb_list)
-
-
 @timer
 def cluster_images(image_list, emb_list, num_clusters):
-    '''Use kmeans clustering to from explore clusters of images
-    given the n-dimensional embeddings from get_embedding().
+    '''Use kmeans clustering to obtain clusters of images
+    given n-dimensional embeddings from get_embedding().
 
     Params
     ------
@@ -204,34 +169,32 @@ def cluster_images(image_list, emb_list, num_clusters):
 
 if __name__=='__main__':
 
-
+    logging.info('Loading configs...')
     CONFIG_FILE = sys.argv[1]
 
     with open(CONFIG_FILE) as cfg:
         config = yaml.safe_load(cfg)
 
+    logging.info('Configuring GPU...')
     gpus = tf.config.experimental.list_physical_devices('GPU')
     if gpus:
         try:
             tf.config.experimental.set_virtual_device_configuration(
                 gpus[0],
-                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=config['training'['gpu_mem']])])
             logical_gpus = tf.config.experimental.list_logical_devices('GPU')
             print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
         except RuntimeError as e:
             pass
 
-    _labels = config['training']['labels']
-    image_shape = config['training']['image_shape']
-
     image_list, label_list = load_images(dir=config['training']['dir'],
-        target_size=(image_shape, image_shape),
+        target_size=(config['training']['image_shape'], config['training']['image_shape']),
         labelmap=config['training']['labels']
         )
 
     image_list, emb_list = get_embedding(image_list=image_list,
     model_name=config['training']['model_name'],
-    image_shape=(image_shape, image_shape, 3),
+    image_shape=(config['training']['image_shape'], config['training']['image_shape'], 3),
     model_loaded=False
     )
 
@@ -242,7 +205,7 @@ if __name__=='__main__':
     num_clusters=config['training']['num_clusters']
     )
     
-    logging.info('Done!')
+    logging.info('Done! ')
     df = pd.DataFrame({'Image' : label_list, 'Cluster' : clustered_images})
 
     print(df)
