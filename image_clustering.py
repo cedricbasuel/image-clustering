@@ -146,10 +146,12 @@ def get_embedding(image_list, model_name, image_shape, model_loaded=True):
         temp_emb = model.predict(img)
         emb_list.append(np.squeeze(temp_emb))
     
-    logging.info('successfully extracted embeddings!!')
+    logging.info('Successfully extracted embeddings.')
     
     return image_list, np.array(emb_list)
 
+
+# remove!!!
 @timer
 def get_embedding_only(image_list, model_name, image_shape):
     emb_list = []
@@ -202,16 +204,34 @@ def cluster_images(image_list, emb_list, num_clusters):
 
 if __name__=='__main__':
 
-    _labels = {'animalz': 0}
 
-    image_list, label_list = load_images(dir='/home/cedric/Downloads/photos',
-        target_size=(224,224),
-        labelmap=_labels
+    CONFIG_FILE = sys.argv[1]
+
+    with open(CONFIG_FILE) as cfg:
+        config = yaml.safe_load(cfg)
+
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            tf.config.experimental.set_virtual_device_configuration(
+                gpus[0],
+                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+            logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+        except RuntimeError as e:
+            pass
+
+    _labels = config['training']['labels']
+    image_shape = config['training']['image_shape']
+
+    image_list, label_list = load_images(dir=config['training']['dir'],
+        target_size=(image_shape, image_shape),
+        labelmap=config['training']['labels']
         )
 
     image_list, emb_list = get_embedding(image_list=image_list,
-    model_name='resnet50',
-    image_shape=(224,224,3),
+    model_name=config['training']['model_name'],
+    image_shape=(image_shape, image_shape, 3),
     model_loaded=False
     )
 
@@ -219,7 +239,7 @@ if __name__=='__main__':
 
     clustered_images = cluster_images(image_list=image_list, 
     emb_list=emb_list, 
-    num_clusters=5
+    num_clusters=config['training']['num_clusters']
     )
     
     logging.info('Done!')

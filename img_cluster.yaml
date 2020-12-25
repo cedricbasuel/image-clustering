@@ -1,0 +1,6 @@
+training:
+  dir: /home/cedric/Downloads/photos
+  image_shape: 224
+  num_clusters: 5
+  labels: {photos: 0}
+  model_name: 'resnet50'
