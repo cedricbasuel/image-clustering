@@ -1,6 +1,6 @@
 # Image clustering app
 
-This tool takes your photos and uses neural networks and clustering to discover group in your album. 
+This tool takes your photos and uses neural networks and clustering to discover groups in your album. 
 
 Make sure that your system has `tensorflow 2.0` and a GPU. You may install the requirements using `pip install -f requirements.txt`
 
