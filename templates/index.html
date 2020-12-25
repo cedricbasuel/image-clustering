@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>ImageCluster</title>
-    
-    <!-- <link rel="stylesheet" href="../static/css/style.css"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -15,8 +13,10 @@
     <br>
     <br>
     <h1>Image clustering tool</h1>
-    <p>Given a folder of images, the following uses a neural network to cluster your pictures based on similarity.</p>   
+    <p>Given a folder of images, the following uses a neural network to cluster your pictures based on similarity. Try uploading your instagram posts and see what your aesthetic is!</p>   
+    
     <h3>Upload album</h3>
+    <!-- upload images form -->
     <form class="form-row" method="POST" action="" enctype="multipart/form-data">
         <div class="custom-file col-4">
           <!-- <input type="file" class="form-control" id="customFile" multiple> -->
@@ -30,12 +30,11 @@
             <!-- <button type="submit" class="btn btn-primary mb-2">Submit</button> -->
         </div>
       </form>
- 
       <br>
       <br>
 
     <h3>Configure model</h3>
-
+    <!-- settings for clustering form -->
     <form method="POST" action="{{ url_for('predict') }}"> 
         <div class="form-row align-item-center">
             <div class="form-group col-3">
@@ -71,8 +70,7 @@
             <img src="{{ url_for('upload', filename=image) }}" style="width: 64px;">
         {% endfor %}
 
-    <h3>Clusters</h3>
-    
+    <h3>Clusters</h3>    
     {% for cluster in cluster_dict %}
         <div class="cluster"> 
             <div class="cluster_label">
@@ -84,20 +82,14 @@
             <div class="cluster_gallery">
                 {% for pic in cluster_dict[cluster] %}
                     <img src="{{ url_for('upload', filename=pic) }}" style="width: 100px; height: 100px; margin:2.5px">
-                {% endfor %} 
-                  
+                {% endfor %}                   
             </div>
                     
         </div>
         <br>
-    {% endfor %} 
-    
-
-    
-     
+    {% endfor %}   
     <br>
     <br>
 
 </body>
-
 </html>
