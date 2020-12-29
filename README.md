@@ -6,4 +6,6 @@ Make sure that your system has `tensorflow 2.0` and a GPU. You may install the r
 
 To run, go to terminal and type `python app.py`. Keep that open while you fire up a browser to go to `localhost:5000`. Enjoy!
 
-![](image_clust.gif)
+
+![](image_clust1.gif)
+
